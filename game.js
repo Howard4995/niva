@@ -18,6 +18,7 @@
   const SPAWN_Y = 200, LINE_Y = -120, TRAVEL = 320;
   const DIFF_NAMES = ['HARD', 'MASTER', 'HELL', 'SCHIZO'];
   const DIFF_STEP = [4, 2, 1, 1];
+  const AUTO_BTN = { x: 6, y: 6, w: 56, h: 20 };   // 選單左上的 AUTO 切換鈕
 
   // ---------- canvas ----------
   const canvas = document.getElementById('game');
@@ -140,6 +141,7 @@
     scene: 'menu',            // menu | loading | play | result
     speed: 6,                 // SPEED (W/S 調整)
     diff: 1,                  // 普面 1-4
+    auto: false,              // 自動遊玩(AUTO):音符到判定線自動完美命中
     page: 0,                  // 選歌頁 (0-6, 每頁8首)
     hoverSong: 1, song: 1,
     // play state
@@ -214,6 +216,20 @@
     // SPEED / level 顯示(Scratch 變數監視器樣式)
     monitor(155, 168, 'SPEED', G.speed);
     monitor(155, 146, 'level', levelOf(G.hoverSong, G.diff) || '');
+    drawAutoBtn();
+  }
+  function drawAutoBtn() {
+    const b = AUTO_BTN;
+    ctx2d.save();
+    ctx2d.fillStyle = G.auto ? 'rgba(40,200,140,.92)' : 'rgba(36,42,60,.85)';
+    ctx2d.strokeStyle = G.auto ? '#7dffcf' : '#454d66';
+    ctx2d.lineWidth = 1;
+    ctx2d.beginPath(); ctx2d.roundRect(b.x, b.y, b.w, b.h, 5); ctx2d.fill(); ctx2d.stroke();
+    ctx2d.fillStyle = G.auto ? '#04231a' : '#9aa3b6';
+    ctx2d.font = 'bold 11px sans-serif';
+    ctx2d.textAlign = 'center'; ctx2d.textBaseline = 'middle';
+    ctx2d.fillText('AUTO', b.x + b.w / 2, b.y + b.h / 2 + 0.5);
+    ctx2d.restore();
   }
   function monitor(x, y, label, val) {
     const cx = 240 + x, cy = 180 - y;
@@ -337,6 +353,13 @@
       for (let i = 0; i < burst; i++) spawnNote(randInt(0, 5));
       G.ninjaNext = t + rand(0, 1);
     }
+    // 自動遊玩(AUTO):音符抵達判定線(t≈ts+st)即自動命中,落在 Conquer 窗內
+    if (G.auto) {
+      for (let l = 0; l < 6; l++) {
+        const q = G.lanes[l];
+        if (q.length && t >= q[0].ts + G.st) keyHit(l);
+      }
+    }
     // 漏接
     for (let l = 0; l < 6; l++) {
       const q = G.lanes[l];
@@ -452,6 +475,14 @@
     // HUD: 分數7位 (-224,147) 步距12 / COMBO5位 (-70,0) 步距30 size250 半透明置底
     drawDigits(G.combo, 5, -70, 0, 30, 250, 0.35);
     drawDigits(G.score, 7, -224, 147, 12, 100, 1);
+    if (G.auto) {
+      ctx2d.save();
+      ctx2d.font = 'bold 13px sans-serif'; ctx2d.textAlign = 'center';
+      ctx2d.fillStyle = 'rgba(55,224,160,.95)';
+      ctx2d.shadowColor = 'rgba(0,0,0,.6)'; ctx2d.shadowBlur = 4;
+      ctx2d.fillText('AUTO', W / 2, 18);
+      ctx2d.restore();
+    }
   }
 
   function drawResult() {
@@ -510,6 +541,7 @@
   const heldPage = { a: false, d: false };
   window.addEventListener('keydown', (e) => {
     const k = e.key.toLowerCase();
+    if (k === 'p' && !e.repeat) G.auto = !G.auto;   // 自動遊玩切換(選單/遊戲中皆可)
     if (G.scene === 'play') {
       const lane = KEYS.indexOf(k);
       if (lane >= 0 && !e.repeat) keyHit(lane);
@@ -536,6 +568,9 @@
   canvas.addEventListener('click', (e) => {
     const pt = canvasPoint(e);
     if (G.scene === 'menu') {
+      // AUTO 切換鈕
+      if (pt.x >= AUTO_BTN.x && pt.x <= AUTO_BTN.x + AUTO_BTN.w &&
+          pt.y >= AUTO_BTN.y && pt.y <= AUTO_BTN.y + AUTO_BTN.h) { G.auto = !G.auto; return; }
       // 難度鈕
       const bb = imgBox(['btnHard', 'btnMaster', 'btnHell', 'btnSchizo'][G.diff - 1], 127, 148, 100);
       if (bb && pt.x >= bb.l && pt.x <= bb.r && pt.y >= bb.t && pt.y <= bb.b) {
