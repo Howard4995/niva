@@ -9,11 +9,25 @@
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: #000; color: #e9ecf3;
-    font-family: "Noto Sans TC", "Segoe UI", system-ui, sans-serif; }
-  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    font-family: "Noto Sans TC", "Segoe UI", system-ui, sans-serif;
+    overflow: hidden;                       /* 不捲動 */
+    overscroll-behavior: none;              /* 關掉下拉刷新/邊緣回彈 */
+    -webkit-tap-highlight-color: transparent; /* 點擊不閃藍框 */
+    -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none;            /* 長按不跳選單 */
+  }
+  body { display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: 0;              /* 鎖住視窗,行動裝置不會晃動 */
+  }
   #stage-wrap { position: relative; width: 640px; max-width: 100vw; aspect-ratio: 4 / 3;
     background: #000; overflow: hidden; }
-  #game { width: 100%; height: 100%; display: block; cursor: pointer; }
+  #game { width: 100%; height: 100%; display: block; cursor: pointer;
+    touch-action: manipulation;            /* 消除 300ms 點擊延遲、禁雙擊縮放 */
+    -webkit-user-drag: none;               /* 畫面不可被拖動 */
+    image-rendering: optimizeQuality;
+    transition: filter .12s ease;          /* 點擊回饋平滑過渡 */
+  }
+  #game:active { filter: brightness(1.07); } /* 按下時的觸覺回饋 */
 </style>
 </head>
 <body>
