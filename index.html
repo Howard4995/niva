@@ -6,15 +6,13 @@
 <title>niva 音樂節奏遊戲 — 原生版(秒開)</title>
 <link rel="icon" href="data:,">
 <style>
-  :root { color-scheme: light; }
+  :root { color-scheme: dark; }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%;
-    background: linear-gradient(180deg, #f5f7fc 0%, #e7ecf6 100%); color: #2a2f3a;
+  html, body { margin: 0; height: 100%; background: #000; color: #e9ecf3;
     font-family: "Noto Sans TC", "Segoe UI", system-ui, sans-serif; }
-  body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
   #stage-wrap { position: relative; width: 640px; max-width: 100vw; aspect-ratio: 4 / 3;
-    margin: 12px 0; background: #000; border-radius: 8px; overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0,0,0,.5); }
+    background: #000; overflow: hidden; }
   #game { width: 100%; height: 100%; display: block; cursor: pointer; }
 </style>
 </head>
