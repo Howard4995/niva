@@ -1,0 +1,14 @@
+# Files that must NOT be uploaded as Cloudflare static assets.
+# The build runs `wrangler deploy` with the repo root as the assets
+# directory, so exclude VCS/tooling files (the .git pack exceeds the
+# 25 MiB per-asset limit) and config that should not be served.
+.git
+.git/**
+node_modules
+node_modules/**
+.gitignore
+.assetsignore
+wrangler.jsonc
+wrangler.toml
+*.map
+README.md
