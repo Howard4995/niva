@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>niva 音樂節奏遊戲 — 原生版(秒開)</title>
+<link rel="icon" href="data:,">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #12141c; color: #e9ecf3;
+    font-family: "Segoe UI", "Noto Sans TC", system-ui, sans-serif; }
+  body { display: flex; flex-direction: column; align-items: center; }
+  header { width: 100%; max-width: 640px; padding: 14px 16px 4px; text-align: center; }
+  header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+  header p { margin: 4px 0 0; font-size: 13px; color: #9aa3b6; }
+  #stage-wrap { position: relative; width: 640px; max-width: 100vw; aspect-ratio: 4 / 3;
+    margin: 12px 0; background: #000; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,.5); }
+  #game { width: 100%; height: 100%; display: block; cursor: pointer; }
+  footer { margin: 10px 0 20px; font-size: 12px; color: #6b7488; text-align: center; line-height: 1.7; }
+  kbd { background:#232838; border:1px solid #343b52; border-radius:4px; padding:1px 6px; font-size:11px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>niva 音樂節奏遊戲 56 — 原生版</h1>
+    <p>選歌:<kbd>A</kbd><kbd>D</kbd> 翻頁、點封面開始 · 遊戲:<kbd>A S D J K L</kbd> · <kbd>W</kbd>/<kbd>S</kbd> 調速 · <kbd>Esc</kbd> 回選單</p>
+  </header>
+  <div id="stage-wrap"><canvas id="game"></canvas></div>
+  <footer>
+    脫離 Scratch 引擎的原生重寫版 · 選單秒開,歌曲點選後才載入<br>
+    可直接雙擊開啟(file://),也可放上任何網頁空間
+  </footer>
+  <script src="core.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
